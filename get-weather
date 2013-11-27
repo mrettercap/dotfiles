@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+
+from urllib.request import urlopen
+from xml.etree.ElementTree import parse
+
+CITY_ID = '2473475'
+TEMP_TYPE = 'f'
+WEATHER_URL = 'http://xml.weather.yahoo.com/forecastrss?w=' + CITY_ID +'&u=' + TEMP_TYPE
+WEATHER_NS = 'http://xml.weather.yahoo.com/ns/rss/1.0'
+
+# icons
+RAIN_ICON = u'\u2602'
+CLOUD_ICON = u'\u2601'
+SUN_ICON = u'\u2600'
+SNOW_ICON = u'\u2744'
+THUNDER_ICON = u'\u2607'
+H_THUNDER_ICON = u'\u2608'
+WIND_ICON = u'\u2691'
+TORNADO_ICON = "@"
+
+rss = parse(urlopen(WEATHER_URL)).getroot()
+ycondition = rss.find('channel/item/{%s}condition' % WEATHER_NS)
+
+temp = ycondition.get('temp')
+condition = ycondition.get('code')
+
+def wtype(wcode):
+    if wcode == 0:
+        return TORNADO_ICON
+    elif wcode == 3:
+        return THUNDER_ICON
+    elif wcode == 4:
+        return H_THUNDER_ICON
+    elif 4 < wcode < 8:
+        return SNOW_ICON
+    elif 7 < wcode < 13:
+        return RAIN_ICON
+    elif 12 < wcode < 19:
+        return SNOW_ICON
+    elif 22 < wcode < 25:
+        return WIND_ICON
+    elif 25 < wcode < 31:
+        return CLOUD_ICON
+    elif 30 < wcode < 35:
+        return SUN_ICON
+    elif wcode == 35:
+        return RAIN_ICON
+    elif 36 < wcode < 40:
+        return THUNDER_ICON
+    elif wcode == 40:
+        return RAIN_ICON
+    elif 40 < wcode < 44:
+        return SNOW_ICON
+    elif wcode == 44:
+        return CLOUD_ICON
+    elif wcode == 45:
+        return THUNDER_ICON
+    elif wcode == 46:
+        return SNOW_ICON
+    elif wcode == 47:
+        return THUNDER_ICON
+    elif wcode == 3200:
+        return "?"
+    else:
+        return SUN_ICON
+
+print("{0} {1}".format(wtype(int(condition)),temp))
