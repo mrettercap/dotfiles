@@ -1,0 +1,36 @@
+#!/bin/sh
+
+getbranch() {
+        git rev-parse --abbrev-ref HEAD 2> /dev/null
+}
+
+getchanges() {
+        git status -s 2> /dev/null
+}
+
+__git_prompt() {
+    local BRANCH="$(getbranch)"
+    local CHANGES="$(getchanges)"
+    RESET="$(tput sgr0)"
+    FIRST="$(tput sgr0; tput setaf 242)"
+    
+    CHGFIRST="$(tput sgr0; tput setaf 242; tput setab 11)"
+    CHGTEXT="$(tput setaf 136)"
+    CHGLAST="$(tput sgr0; tput setaf 11)"
+
+    NOCHGFIRST="$(tput sgr0; tput setaf 242; tput setab 0)"
+    NOCHGTEXT="$(tput setaf 242)"
+    NOCHGLAST="$(tput sgr0; tput setaf 0)"
+
+    
+    if [ ${#BRANCH} -gt 1 ]; then
+        if [ ${#CHANGES} -gt 1 ]; then
+            echo -e "\001${CHGFIRST}\002\001${CHGTEXT}\002  ${BRANCH} \001${CHGLAST}\002"
+        else
+            echo -e "\001${NOCHGFIRST}\002\001${NOCHGTEXT}\002  ${BRANCH} \001${NOCHGLAST}\002"
+        fi
+    else
+        echo -e "\001${FIRST}\002\001${RESET}\002"
+    fi
+}
+
