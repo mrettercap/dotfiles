@@ -23,6 +23,7 @@ ycondition = rss.find('channel/item/{%s}condition' % WEATHER_NS)
 
 temp = ycondition.get('temp')
 condition = ycondition.get('code')
+textcond = ycondition.get('text')
 
 def wtype(wcode):
     if wcode == 0:
@@ -64,4 +65,5 @@ def wtype(wcode):
     else:
         return SUN_ICON
 
-print("{0} {1}".format(wtype(int(condition)),temp))
+#print("{0} {1}".format(wtype(int(condition)),temp))
+print("{0}, {1}F".format(textcond,temp))
