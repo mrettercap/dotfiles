@@ -12,20 +12,31 @@ export PATH
 # Aliases
 alias dh='df -h'
 alias irssi='TERM=screen-256color irssi'
+alias ls='ls -h'
 
 # Make for pretty colours
-export TERM='xterm-256color'
+#export TERM='xterm-256color'
+export TERM=screen-256color
 export CLICOLOR=1
 
 # LSColors
 #export LSCOLORS=ExDx 
 
 # Export it.
-source ~/.bash/git-prompt
+errstat=0
+function chk_status {
+    errstat="$?"
+}
+
 USERCOLOR="$(tput setab 42; tput setaf 29)"
 ARROWCOLOR="$(tput setab 242; tput setaf 42)"
+ERRCOLOR="$(tput setab 1; tput setaf 52)"
+ARROWERRCOLOR="$(tput setab 242; tput setaf 1)"
+
 CWDCOLOR="$(tput setaf 250)"
 RESET=$(tput sgr0)
-export PS1="\[$USERCOLOR\] \u  \h \[$ARROWCOLOR\]\[$CWDCOLOR\] \W \$(__git_prompt)\[$RESET\] "
+PROMPT_COMMAND=chk_status
+source ~/.bash/git-prompt
+export PS1='$( [ $errstat -eq 0 ] && echo "\[$USERCOLOR\] \u  \h \[$ARROWCOLOR\]" || echo "\[$ERRCOLOR\] \u  \h \[$ARROWERRCOLOR\]" )\[$CWDCOLOR\] \W $( __git_prompt )\[$RESET\] '
 
 
