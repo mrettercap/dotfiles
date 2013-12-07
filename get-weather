@@ -65,5 +65,4 @@ def wtype(wcode):
     else:
         return SUN_ICON
 
-#print("{0} {1}".format(wtype(int(condition)),temp))
-print("{0}, {1}F".format(textcond,temp))
+print("{0}  {1}".format(wtype(int(condition)),temp))
